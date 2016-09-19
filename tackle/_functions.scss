@@ -1,0 +1,29 @@
+// @todo attribute
+@function tb-pow($base, $exponent) {
+  $value: 1;
+
+  @if $exponent >= 0 {
+    @for $i from 1 through $exponent {
+      $value: $value * $base;
+    }
+  }
+    //
+  @else {
+    @for $i from $exponent to 0 {
+      $value: $value / $base;
+    }
+  }
+
+  @return $value;
+}
+
+$tb-decimal-places: 4 !default;
+
+@function tb-round-decimal($number, $places: $tb-decimal-places) {
+  @if 0 == $places {
+    @return round($number);
+  }
+
+  $n: tb-pow(10, $places);
+  @return round($number * $n) / $n;
+}

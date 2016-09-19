@@ -1,0 +1,224 @@
+//------------------------------------------------------------------------------
+// Grid
+
+$grid: (
+    group:(
+      // Toggles additional styles for nested groups
+        nesting-toggle: true
+    ),
+    cells:(
+      // List of Grid parts available: i.e. 12 part grid
+        parts-available: (12)
+    ),
+  // Responsive gutters
+    gutters: (
+      //@fixme xsm is a name that can be changed need to use numbers or create
+        xxsm: tb-pd-h(xsm),
+        sm: tb-pd-h(sm),
+    ),
+    order:(
+      // Number of cells within a group that `order:` will be applied to
+        yield: 12
+    ),
+) !default;
+
+/// convert fractional (1 of 12) to percent
+/// @param {List} $fractional
+/// @return {Number} Percent
+/// @since 0.1.0
+@function tb-percent-of($fractional, $places:4) {
+  @if length($fractional) {
+    @return tb-round-decimal(percentage(nth($fractional, 1) / nth($fractional, 3)), $places);
+  }
+  @return null;
+}
+
+/// Returns map of grids ('6-12': 50%)
+/// @since 0.1.0
+/// @return {Map}
+@function tb-make-grid-map() {
+  $grid-list: ();
+
+  @each $denominator in map-get-deep($grid, cells, parts-available) {
+    @for $numerator from 1 through $denominator {
+      $grid-list: map-merge($grid-list, ('#{$numerator}-#{$denominator}': percentage($numerator / $denominator)));
+    }
+  }
+
+  @return $grid-list;
+}
+
+$_grid-map: tb-make-grid-map();
+
+@mixin group-support-old {
+  &::before,
+  &::after {
+    content: ' ';
+    display: table;
+  }
+
+  &::after { clear: both; }
+
+  > * { float: left; }
+}
+
+@mixin tb-grid-gutters(
+  $type: 'cell',
+  $gutter-width-breakpoints: map-get-deep($grid, gutters),
+  $important: true
+) {
+
+  @each $bp, $value in $gutter-width-breakpoints {
+    @include tb-breakpoint($bp) {
+      @if 'cell' == $type {
+        padding-left: $value;
+        padding-right: $value;
+      }
+        //
+      @else if 'group' == $type {
+        margin-right: $value;
+        margin-left: $value;
+      }
+        //
+      @else if ('group-children') == $type {
+
+        > * {
+          padding-left: $value;
+          padding-right: $value;
+        }
+
+      }
+        //
+      @else if 'group-nested' == $type {
+        margin-right: $value * -1;
+        margin-left: $value * -1;
+      }
+    }
+  }
+}
+
+/// Group
+// @todo Auto child to be removed and replaced with a default cell to be width 100%
+@mixin tb-grid-group(
+  $nesting-toggle: map-get-deep($grid, nesting-toggle),
+  $is-nested: false,
+  $direction: row,
+  $wrap: wrap,
+  $gutter-width-breakpoints: map-get-deep($grid, gutters),
+  $support-old: false
+) {
+  display: flex;
+  flex-wrap: $wrap; // @fixme: 2 cells eg(20% & 80%) wrap on page zoom (in? out?).
+  flex-direction: $direction;
+
+  @if $support-old {
+    @include group-support-old();
+  }
+
+  @if $is-nested {
+    @include tb-grid-gutters('group-no', $gutter-width-breakpoints, false);
+  }
+
+  @if $nesting-toggle {
+    #{&} {
+      @include tb-grid-gutters('group-no', $gutter-width-breakpoints, false);
+    }
+  }
+}
+
+@mixin tb-grid-cell(//
+  // Cell Type
+  $type: null,
+
+  // Reordering Cells
+  // Accepted: null, "first", "last", number
+  $order: null
+
+) {
+
+  // todo bp specific args ie: (xxsm: 100%, sm: 2 of 3, lg: grow)
+  @if 'map' == type-of($type) {
+    @each $bp, $value in $type {
+      @include tb-breakpoint($bp) {
+        @include grid-cell($value);
+      }
+    }
+  }
+    //
+  @else {
+
+    @if 3 == length($type) { $type: tb-percent-of($type); }
+
+    @if 'number' == type-of($type) {
+      flex-grow: 0;
+      flex-shrink: 0;
+      width: $type !important;
+    }
+      //
+    @else if 'grow' == $type {
+      flex-basis: auto !important;
+      flex-shrink: 0;
+      flex-grow: 1;
+      width: auto !important;
+      //max-width: 100%;
+    }
+      //
+    @else if 'shrink' == $type {
+      flex-basis: auto !important;
+      flex-shrink: 1;
+      flex-grow: 0;
+      width: auto !important;
+      //max-width: 100%;
+    }
+
+    @if $order != null {
+      @include order-cell($order);
+    }
+
+  }
+}
+
+/// Enable cells within a group to be reordered
+///
+/// @param {Number} $yield [$cell-order-yield] Number of cells
+///
+/// @group grid
+///
+/// @example scss - Usage
+///   .c1 { @include group-reorder(3); }
+///
+/// @example css - CSS output
+///   .c1 > :nth-child(1) { order: 2; }
+///   .c1 > :nth-child(2) { order: 4; }
+///   .c1 > :nth-child(3) { order: 6; }
+@mixin order-group($yield: map-get-deep($grid, order, yield)) {
+  @for $i from 1 through $yield {
+    $order: $i * 2;
+
+    > :nth-child(#{$i}) { order: $order; }
+
+  }
+}
+
+/// Reorder cell
+///
+/// @param {Number | String} $yield [$cell-order-yield] Accepts: 'first', 'last', number
+///
+/// @group grid
+///
+/// @example scss - Usage
+///   .c1 { @include cell-reorder(3); }
+///
+/// @example css - CSS output
+///   .c1 { order: 7 !important; }
+@mixin order-cell($order: null) {
+  @if 'first' == $order {
+    order: -999 !important;
+  } //
+  @else if 'last' == $order {
+    order: 999 !important;
+  } //
+  @else if number == type-of($order) {
+    order: (($order * 2) + 1) !important;
+  }
+}

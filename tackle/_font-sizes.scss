@@ -1,0 +1,31 @@
+//------------------------------------------------------------------------------
+// Font Sizes
+
+// Base unit used to calculate modular scale
+$tb-font-size-base: 1em !default;
+
+// Modular scale name for font-size to use
+$tb-font-size-scale: 'perfect-fourth' !default;
+
+// font-size scale values | used for memoization
+$tb-font-size-map: () !default;
+
+// populate $font-size-map
+@each $size in $tb-size-suffixes {
+  $size-name: nth($size, 1);
+  $index: map-get($tb-size-suffixes, $size-name);
+
+  $tb-font-size-map: map-merge(
+          $tb-font-size-map,
+          ($size-name: tb-scale(
+                  $index,
+                  $tb-font-size-base,
+                  map-get($_tb-modular-scales, $tb-font-size-scale)
+          ))
+  );
+}
+
+@function tb-fz($size) {
+  //@todo validate $size
+  @return map-get($tb-font-size-map, $size);
+}

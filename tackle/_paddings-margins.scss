@@ -1,0 +1,87 @@
+//------------------------------------------------------------------------------
+// Paddings and Margins
+
+$_tb-margin-vertical-map: ();
+$_tb-margin-horizontal-map: ();
+$_tb-padding-vertical-map: ();
+$_tb-padding-horizontal-map: ();
+
+// populate margin and padding maps
+@each $size in $tb-size-suffixes {
+  $size-name: nth($size, 1);
+  $index: map-get($tb-size-suffixes, $size-name);
+  $_tb-margin-vertical-map: map-merge(
+          $_tb-margin-vertical-map,
+          ($size-name: tb-scale(
+                  $index,
+                  map-get-deep($_tb-paddings-margins, margin, vertical-base),
+                  map-get($_tb-modular-scales, map-get-deep($_tb-paddings-margins, margin, scale))
+         ))
+ );
+  $_tb-margin-horizontal-map: map-merge(
+          $_tb-margin-horizontal-map,
+          ($size-name: tb-scale(
+                  $index,
+                  map-get-deep($_tb-paddings-margins, margin, horizontal-base),
+                  map-get($_tb-modular-scales, map-get-deep($_tb-paddings-margins, margin, scale))
+         ))
+ );
+  $_tb-padding-vertical-map: map-merge(
+          $_tb-padding-vertical-map,
+          ($size-name: tb-scale(
+                  $index,
+                  map-get-deep($_tb-paddings-margins, padding, vertical-base),
+                  map-get($_tb-modular-scales, map-get-deep($_tb-paddings-margins, padding, scale))
+         ))
+ );
+  $_tb-padding-horizontal-map: map-merge(
+          $_tb-padding-horizontal-map,
+          ($size-name: tb-scale(
+                  $index,
+                  map-get-deep($_tb-paddings-margins, padding, horizontal-base),
+                  map-get($_tb-modular-scales, map-get-deep($_tb-paddings-margins, padding, scale))
+         ))
+ );
+}
+
+//@todo $size: default
+@function tb-mg-v($size) {
+  //@todo validate $size with func
+  @return map-get($_tb-margin-vertical-map, $size);
+}
+
+@function tb-mg-h($size) {
+  @return map-get($_tb-margin-horizontal-map, $size);
+}
+
+@function tb-pd-v($size) {
+  @return map-get($_tb-padding-vertical-map, $size);
+}
+
+@function tb-pd-h($size) {
+  @return map-get($_tb-padding-horizontal-map, $size);
+}
+
+@mixin tb-mg-v($size, $important: null) {
+  $important: if($important, unquote('!important'), null);
+  margin-top: map-get($_tb-margin-vertical-map, $size) $important;
+  margin-bottom: map-get($_tb-margin-vertical-map, $size) $important;
+}
+
+@mixin tb-mg-h($size, $important: null) {
+  $important: if($important, unquote('!important'), null);
+  margin-right: map-get($_tb-margin-horizontal-map, $size) $important;
+  margin-left: map-get($_tb-margin-horizontal-map, $size) $important;
+}
+
+@mixin tb-pd-v($size, $important: null) {
+  $important: if($important, unquote('!important'), null);
+  padding-top: map-get($_tb-padding-vertical-map, $size) $important;
+  padding-bottom: map-get($_tb-padding-vertical-map, $size) $important;
+}
+
+@mixin tb-pd-h($size, $important: null) {
+  $important: if($important, unquote('!important'), null);
+  padding-right: map-get($_tb-padding-horizontal-map, $size) $important;
+  padding-left: map-get($_tb-padding-horizontal-map, $size) $important;
+}

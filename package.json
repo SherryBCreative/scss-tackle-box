@@ -1,0 +1,23 @@
+{
+  "name": "scss-tackle-box",
+  "version": "0.0.2",
+  "description": "A Tackle Box of various Scss tools and tackle.",
+  "main": "Gruntfile.js",
+  "author": "SherryBCreative",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SherryBCreative/scss-tackle-box"
+  },
+  "bugs": {
+    "url": "https://github.com/SherryBCreative/scss-tackle-box/issues"
+  },
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-scss-lint": "^0.3.8",
+    "jit-grunt": "^0.10.0",
+    "time-grunt": "^1.4.0"
+  }
+}

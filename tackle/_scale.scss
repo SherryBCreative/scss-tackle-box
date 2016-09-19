@@ -1,0 +1,36 @@
+//------------------------------------------------------------------------------
+// Scale
+
+$_tb-modular-scales: (
+    minor-second: 1.067,
+    major-second: 1.125,
+    minor-third: 1.2,
+    major-third: 1.25,
+    perfect-fourth: 1.333,
+    augmented-fourth: 1.414,
+    perfect-fifth: 1.5,
+    minor-sixth: 1.6,
+    golden-ratio: 1.618,
+    major-sixth: 1.667,
+    octave: 2,
+);
+
+@function tb-scale($index, $base, $scale) {
+  $return: $base;
+  // // do nothing
+  @if 0 == $index { }
+    // divide
+  @else if 0 > $index {
+    @for $i from $index through -1 {
+      $return: $return / $scale;
+    }
+  }
+    // multiply
+  @else {
+    @for $i from 1 through $index {
+      $return: $return * $scale;
+    }
+  }
+
+  @return tb-round-decimal($return);
+}
