@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 // Grid
 
-$grid: (
+$tb_grid: (
     group:(
       // Toggles additional styles for nested groups
         nesting-toggle: true
@@ -39,7 +39,7 @@ $grid: (
 @function tb-make-grid-map() {
   $grid-list: ();
 
-  @each $denominator in map-get-deep($grid, cells, parts-available) {
+  @each $denominator in map-get-deep($tb_grid, cells, parts-available) {
     @for $numerator from 1 through $denominator {
       $grid-list: map-merge($grid-list, ('#{$numerator}-#{$denominator}': percentage($numerator / $denominator)));
     }
@@ -64,12 +64,12 @@ $_grid-map: tb-make-grid-map();
 
 @mixin tb-grid-gutters(
   $type: 'cell',
-  $gutter-width-breakpoints: map-get-deep($grid, gutters),
+  $gutter-width-breakpoints: map-get-deep($tb_grid, gutters),
   $important: true
 ) {
 
   @each $bp, $value in $gutter-width-breakpoints {
-    @include tb-breakpoint($bp) {
+    @include media('>#{$bp}') {
       @if 'cell' == $type {
         padding-left: $value;
         padding-right: $value;
@@ -100,11 +100,11 @@ $_grid-map: tb-make-grid-map();
 /// Group
 // @todo Auto child to be removed and replaced with a default cell to be width 100%
 @mixin tb-grid-group(
-  $nesting-toggle: map-get-deep($grid, nesting-toggle),
+  $nesting-toggle: map-get-deep($tb_grid, nesting-toggle),
   $is-nested: false,
   $direction: row,
   $wrap: wrap,
-  $gutter-width-breakpoints: map-get-deep($grid, gutters),
+  $gutter-width-breakpoints: map-get-deep($tb_grid, gutters),
   $support-old: false
 ) {
   display: flex;
@@ -139,8 +139,8 @@ $_grid-map: tb-make-grid-map();
   // todo bp specific args ie: (xxsm: 100%, sm: 2 of 3, lg: grow)
   @if 'map' == type-of($type) {
     @each $bp, $value in $type {
-      @include tb-breakpoint($bp) {
-        @include grid-cell($value);
+      @include media('>#{$bp}') {
+        @include tb-grid-cell($value);
       }
     }
   }
@@ -191,7 +191,7 @@ $_grid-map: tb-make-grid-map();
 ///   .c1 > :nth-child(1) { order: 2; }
 ///   .c1 > :nth-child(2) { order: 4; }
 ///   .c1 > :nth-child(3) { order: 6; }
-@mixin order-group($yield: map-get-deep($grid, order, yield)) {
+@mixin order-group($yield: map-get-deep($tb_grid, order, yield)) {
   @for $i from 1 through $yield {
     $order: $i * 2;
 

@@ -1,6 +1,6 @@
 {
   "name": "scss-tackle-box",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "/_tackle-box.scss",
   "license": "MIT",
   "ignore": [
