@@ -8,24 +8,36 @@ $tb-font-size-base: 1em !default;
 $tb-font-size-scale: 'perfect-fourth' !default;
 
 // font-size scale values | used for memoization
-$tb-font-size-map: () !default;
+$tb-font-size-map: () !global;
 
 // populate $font-size-map
-@each $size in $tb-size-suffixes {
-  $size-name: nth($size, 1);
-  $index: map-get($tb-size-suffixes, $size-name);
 
-  $tb-font-size-map: map-merge(
-          $tb-font-size-map,
-          ($size-name: tb-scale(
-                  $index,
-                  $tb-font-size-base,
-                  map-get($_tb-modular-scales, $tb-font-size-scale)
-          ))
-  );
-}
+@function tb-fz($size, $scale:$tb-font-size-scale) {
 
-@function tb-fz($size) {
-  //@todo validate $size
-  @return map-get($tb-font-size-map, $size);
+  @if map-get($tb-font-size-map, $scale) {
+    @return tb-map-get-deep($tb-font-size-map, $scale, $size);
+  } //
+  @else {
+    @if map_get($_tb-modular-scales, $scale) {
+      $map: ();
+
+      @each $size in $tb-size-suffixes {
+        $size-name: nth($size, 1);
+        $index: map-get($tb-size-suffixes, $size-name);
+
+        $map: map_merge($map, ($size-name: tb-scale(
+                $index,
+                $tb-font-size-base,
+                map-get($_tb-modular-scales, $scale)
+        )));
+      }
+      $tb-font-size-map: tb-map-set-deep($tb-font-size-map, $scale, $map) !global;
+
+      @return tb-map-get-deep($tb-font-size-map, $scale, $size);
+    } //
+    @else {
+      @error '`#{$scale}` does not exist in $_tb-modular-scales';
+    }
+  }
+
 }
