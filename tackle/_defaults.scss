@@ -23,15 +23,23 @@ $tb-size-suffixes: (
 
 $_tb-paddings-margins: (
     margin: (
-      // Base unit used to calculate modular scale
-        vertical-base: 2rem,
-        horizontal-base: 2rem,
-      // Modular scale name for margin to use
-        scale: 'major-sixth'
-   ),
+        vertical:(
+            base: 2rem,
+            scale: 'major-sixth',
+        ),
+        horizontal:(
+            base: 2rem,
+            scale: 'major-sixth',
+        ),
+    ),
     padding: (
-        vertical-base: 1em,
-        horizontal-base: 1rem,
-        scale: 'major-sixth'
-   )
+        vertical:(
+            base: 1em,
+            scale: 'major-sixth',
+        ),
+        horizontal:(
+            base: 1rem,
+            scale: 'major-sixth',
+        ),
+    )
 ) !default;

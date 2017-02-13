@@ -13,7 +13,7 @@ $_tb-modular-scales: (
     golden-ratio: 1.618,
     major-sixth: 1.667,
     octave: 2,
-);
+) !default;
 
 @function tb-scale($index, $base, $scale) {
   $return: $base;
