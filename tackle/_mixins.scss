@@ -1,0 +1,39 @@
+@mixin tb-output-declaration($map) {
+  @if 'map' != type_of($map) {
+    @error 'tb-output-declaration expects a map. given `#{type_of($map)}`';
+  }
+
+  @each $key, $value in $map {
+
+    @if 'map' == type_of($value) {
+
+      @if index((link, visited, hover, active, focus), $key) {
+
+        &:#{$key} {
+          @include tb-output-declaration($value);
+        }
+      }
+        //
+      @else {
+        @each $value-key, $value-value in $value {
+
+          @if index((link, visited, hover, active, focus), $value-key) {
+
+            &-#{$key}:#{$value-key} {
+              @include tb-output-declaration($value-value);
+            }
+          }
+            //
+          @else {
+            &-#{$key} { #{$value-key}: $value-value }
+          ;
+          }
+        }
+      }
+    }
+      //
+    @else {
+      #{$key}: $value;
+    }
+  }
+}
