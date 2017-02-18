@@ -48,7 +48,8 @@ $tb-decimal-places: 4 !default;
 /// @param {Arglist} $keys - Keys to access to value to update
 /// @param {*} $value - New value (last member of `$keys`)
 /// @return {Map} - Updated map
-@function tb-map-set-deep($map, $keys.../*, $value */) {
+@function tb-map-set-deep($map, $keys.../*, $value */
+) {
   $map-list: ($map,);
   $result: null;
 
@@ -105,4 +106,14 @@ $tb-decimal-places: 4 !default;
   }
 
   @return $map-old;
+}
+
+/// Convert px to em
+///
+/// @param {measure|number} $px
+/// @param {measure|number} $base
+///
+/// @return {measure}
+@function tb-px-to-em($px, $base:16px) {
+  @return $px/$base * 1em;
 }
