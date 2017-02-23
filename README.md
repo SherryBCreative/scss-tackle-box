@@ -3,7 +3,7 @@ scss-tackle-box
 
 A Tackle Box of various Scss tools and tackle. 
 
-Version 0.0.5
+Version 0.0.6
 
 ##How to install
 

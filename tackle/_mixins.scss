@@ -1,39 +1,116 @@
 @mixin tb-output-declaration($map) {
+
   @if 'map' != type_of($map) {
-    @error 'tb-output-declaration expects a map. given `#{type_of($map)}`';
+    @error 'tb-output-declaration() expects type `map`. Given `#{type_of($map)}`';
   }
 
   @each $key, $value in $map {
-
     @if 'map' == type_of($value) {
 
-      @if index((link, visited, hover, active, focus), $key) {
+      @if str-index($key, 'bp-') {
 
+        @include media('>#{str-slice($key, 4)}') {
+          @include tb-output-declaration($value);
+        }
+
+      } //
+      @else if index((link, visited, hover, active, focus), $key) {
         &:#{$key} {
           @include tb-output-declaration($value);
         }
-      }
-        //
+      } //
+      @else if index((headings), $key) {
+        h1, h2, h3, h4, h5, h6 {
+          @include tb-output-declaration($value);
+        }
+      } //
+      @else if index((font-size-respond), $key) {
+        @each $bp-name, $bp-value in $value {
+          @include media('>#{$bp-name}') { font-size: $bp-value; }
+        }
+      } //
       @else {
-        @each $value-key, $value-value in $value {
+        #{$key} {
+          @include tb-output-declaration($value);
+        }
+      }
+    } //
+    @else {
+      #{$key}: $value;
+    }
+  }
+}
 
-          @if index((link, visited, hover, active, focus), $value-key) {
+@mixin tb-builder-colors($map, $namespace) {
 
-            &-#{$key}:#{$value-key} {
-              @include tb-output-declaration($value-value);
-            }
-          }
-            //
-          @else {
-            &-#{$key} { #{$value-key}: $value-value }
-          ;
-          }
+  @if 'map' != type_of($map) {
+    @error 'tb-builder-colors() expects type `map`. Given `#{type_of($map)}`';
+  }
+
+  @each $key, $value in $map {
+    @if not map-get($value, disable-foreground) {
+      .#{$namespace}-c-#{$key} { color: map-get($value, color) !important; }
+    }
+
+    @if not map-get($value, disable-background) {
+      .#{$namespace}-bgc-#{$key} { background-color: map-get($value, color) !important; }
+    }
+  }
+}
+
+@mixin tb-builder-sections-output($bp-name, $class, $values) {
+  @include media('>=#{$bp-name}') {
+    #{$class} {
+      @include tb-output-declaration($values);
+    }
+  }
+}
+
+@mixin tb-builder-sections($map, $namespace, $sxn-name: '.sxn', $row-name: '.row', $col-name: '.col' ) {
+  @each $name, $bp-values in $map {
+
+    @each $bp-name, $blocks in $bp-values {
+      @each $block-name, $block-values in $blocks {
+        $sxn: if('default' != $name, '#{$sxn-name}.#{$namespace}-sxn-#{$name}', #{$sxn-name});
+
+        @if 'section'== $block-name {
+          @include tb-builder-sections-output($bp-name, $sxn, $block-values);
+        } //
+        @else if 'row'== $block-name {
+          @include tb-builder-sections-output($bp-name, $sxn #{$row-name}, $block-values);
+        } //
+        @else if 'column'== $block-name {
+          @include tb-builder-sections-output($bp-name, $sxn #{$col-name}, $block-values);
+        } //
+        @else if 'button'== $block-name {
+          $class: '#page-container #{$sxn} input[type="submit"]';
+          @include tb-builder-sections-output($bp-name, unquote($class), $block-values);
+        } //
+        @else {
+          @include tb-builder-sections-output($bp-name, $sxn #{$block-name}, $block-values);
         }
       }
     }
-      //
-    @else {
-      #{$key}: $value;
+  }
+}
+
+@mixin tb-builder-grids($map, $namespace, $row-name: '.row', $col-name: '.col' ) {
+  .#{$namespace}-#{$row-name} {
+    @include tb-grid-group($is-nested: true);
+  }
+
+  .#{$namespace}-#{$col-name} {
+    @include tb-grid-gutters();
+  }
+
+  @each $name, $bp-values in $map {
+    @each $bp-name, $value in $bp-values {
+
+      @include media('>=#{$bp-name}') {
+        .#{$namespace}-#{$col-name}-#{$name} {
+          @include tb-grid-cell($value);
+        }
+      }
     }
   }
 }

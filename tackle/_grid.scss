@@ -13,8 +13,9 @@ $tb_grid: (
   // Responsive gutters
     gutters: (
       //@fixme xsm is a name that can be changed need to use numbers or create
-        xxsm: tb-pd-h(xsm),
+        base: tb-pd-h(xxsm),
         sm: tb-pd-h(sm),
+        md: tb-pd-h(normal),
     ),
     order:(
       // Number of cells within a group that `order:` will be applied to
@@ -73,22 +74,17 @@ $_grid-map: tb-make-grid-map();
       @if 'cell' == $type {
         padding-left: $value;
         padding-right: $value;
-      }
-        //
+      } //
       @else if 'group' == $type {
         margin-right: $value;
         margin-left: $value;
-      }
-        //
+      } //
       @else if ('group-children') == $type {
-
         > * {
           padding-left: $value;
           padding-right: $value;
         }
-
-      }
-        //
+      } //
       @else if 'group-nested' == $type {
         margin-right: $value * -1;
         margin-left: $value * -1;
@@ -116,14 +112,14 @@ $_grid-map: tb-make-grid-map();
   }
 
   @if $is-nested {
-    @include tb-grid-gutters('group-no', $gutter-width-breakpoints, false);
+    @include tb-grid-gutters('group-nested', $gutter-width-breakpoints, false);
   }
 
-  @if $nesting-toggle {
-    #{&} {
-      @include tb-grid-gutters('group-no', $gutter-width-breakpoints, false);
-    }
-  }
+  //@if $nesting-toggle {
+  //  #{&} {
+  //    @include tb-grid-gutters('group-nested', $gutter-width-breakpoints, false);
+  //  }
+  //}
 }
 
 @mixin tb-grid-cell(//
@@ -150,8 +146,8 @@ $_grid-map: tb-make-grid-map();
     @if 3 == length($type) { $type: tb-percent-of($type); }
 
     @if 'number' == type-of($type) {
-      flex-grow: 0;
-      flex-shrink: 0;
+      //flex-grow: 0;
+      //flex-shrink: 0;
       width: $type !important;
     }
       //
