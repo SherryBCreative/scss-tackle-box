@@ -5,34 +5,36 @@
   }
 
   @each $key, $value in $map {
-
     @if 'map' == type_of($value) {
 
-      @if index((link, visited, hover, active, focus), $key) {
+      @if str-index($key, 'bp-') {
 
+        @include media('>#{str-slice($key, 4)}') {
+          @include tb-output-declaration($value);
+        }
+
+      } //
+      @else if index((link, visited, hover, active, focus), $key) {
         &:#{$key} {
           @include tb-output-declaration($value);
         }
-      }
-        //
+      } //
+      @else if index((headings), $key) {
+        h1, h2, h3, h4, h5, h6 {
+          @include tb-output-declaration($value);
+        }
+      } //
+      @else if index((font-size-respond), $key) {
+        @each $bp-name, $bp-value in $value {
+          @include media('>#{$bp-name}') { font-size: $bp-value; }
+        }
+      } //
       @else {
-        @each $value-key, $value-value in $value {
-
-          @if index((link, visited, hover, active, focus), $value-key) {
-
-            &-#{$key}:#{$value-key} {
-              @include tb-output-declaration($value-value);
-            }
-          }
-            //
-          @else {
-            &-#{$key} { #{$value-key}: $value-value }
-          ;
-          }
+        #{$key} {
+          @include tb-output-declaration($value);
         }
       }
-    }
-      //
+    } //
     @else {
       #{$key}: $value;
     }
@@ -45,8 +47,7 @@
     @error 'tb-builder-colors() expects type `map`. Given `#{type_of($map)}`';
   }
 
-  @each $key, $value in map-get($map, 'colors') {
-
+  @each $key, $value in $map {
     @if not map-get($value, disable-foreground) {
       .#{$namespace}-c-#{$key} { color: map-get($value, color) !important; }
     }
@@ -58,26 +59,19 @@
 }
 
 @mixin tb-builder-sections-output($bp-name, $class, $values) {
-  //@if 'base' == $bp-name {
-  //  #{$class} {
-  //    @include tb-output-declaration($values);
-  //  }
-  //} //
-  //@else {
   @include media('>=#{$bp-name}') {
     #{$class} {
       @include tb-output-declaration($values);
     }
   }
-  //}
 }
 
 @mixin tb-builder-sections($map, $namespace, $sxn-name: '.sxn', $row-name: '.row', $col-name: '.col' ) {
-  @each $name, $bp-values in map-get($map, 'sections') {
+  @each $name, $bp-values in $map {
 
     @each $bp-name, $blocks in $bp-values {
       @each $block-name, $block-values in $blocks {
-        $sxn: if('root' != $name, '#{$sxn-name}.#{$namespace}-sxn-#{$name}', #{$sxn-name});
+        $sxn: if('default' != $name, '#{$sxn-name}.#{$namespace}-sxn-#{$name}', #{$sxn-name});
 
         @if 'section'== $block-name {
           @include tb-builder-sections-output($bp-name, $sxn, $block-values);
@@ -87,7 +81,12 @@
         } //
         @else if 'column'== $block-name {
           @include tb-builder-sections-output($bp-name, $sxn #{$col-name}, $block-values);
-        } @else {
+        } //
+        @else if 'button'== $block-name {
+          $class: '#page-container #{$sxn} input[type="submit"]';
+          @include tb-builder-sections-output($bp-name, unquote($class), $block-values);
+        } //
+        @else {
           @include tb-builder-sections-output($bp-name, $sxn #{$block-name}, $block-values);
         }
       }
@@ -104,23 +103,14 @@
     @include tb-grid-gutters();
   }
 
-  @each $name, $bp-values in map-get($map, 'grids') {
+  @each $name, $bp-values in $map {
     @each $bp-name, $value in $bp-values {
 
-      //@if 'base' == $bp-name {
-      //  @debug $value;
-      //  .#{$namespace}-#{$col-name}-#{$name} {
-      //    @include tb-grid-cell($value);
-      //  }
-      //} //
-      //@else {
       @include media('>=#{$bp-name}') {
         .#{$namespace}-#{$col-name}-#{$name} {
           @include tb-grid-cell($value);
         }
       }
-      //}
-      //
     }
   }
 }
