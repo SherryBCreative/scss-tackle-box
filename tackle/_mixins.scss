@@ -1,3 +1,9 @@
+// ############################################################################
+// Various Mixins
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+///
 @mixin tb-output-declaration($map) {
 
   @if 'map' != type_of($map) {
@@ -41,6 +47,8 @@
   }
 }
 
+// ----------------------------------------------------------------------------
+///
 @mixin tb-builder-colors($map, $namespace) {
 
   @if 'map' != type_of($map) {
@@ -58,6 +66,8 @@
   }
 }
 
+// ----------------------------------------------------------------------------
+///
 @mixin tb-builder-sections-output($bp-name, $class, $values) {
   @include media('>=#{$bp-name}') {
     #{$class} {
@@ -66,6 +76,8 @@
   }
 }
 
+// ----------------------------------------------------------------------------
+///
 @mixin tb-builder-sections($map, $namespace, $sxn-name: '.sxn', $row-name: '.row', $col-name: '.col' ) {
   @each $name, $bp-values in $map {
 
@@ -94,6 +106,8 @@
   }
 }
 
+// ----------------------------------------------------------------------------
+///
 @mixin tb-builder-grids($map, $namespace, $row-name: '.row', $col-name: '.col' ) {
   .#{$namespace}-#{$row-name} {
     @include tb-grid-group($is-nested: true);
