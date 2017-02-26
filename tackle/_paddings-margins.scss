@@ -1,12 +1,16 @@
-//------------------------------------------------------------------------------
+// ############################################################################
 // Paddings and Margins
+// ----------------------------------------------------------------------------
 
+// ----------------------------------------------------------------------------
+///
 $_tb-paddings-margins-map: (
     margin:(),
     padding:(),
 );
 
-
+// ----------------------------------------------------------------------------
+///
 @function tb-mg-pd($size, $scale, $type, $direction  ) {
 
   @if tb-map-get-deep($_tb-paddings-margins-map, $type, $scale) {
@@ -44,6 +48,8 @@ $_tb-paddings-margins-map: (
   }
 }
 
+// ----------------------------------------------------------------------------
+///
 @function tb-mg-v(
   $size: normal,
   $scale: tb-map-get-deep($_tb-paddings-margins, margin, vertical, scale),
@@ -52,45 +58,8 @@ $_tb-paddings-margins-map: (
   @return tb-mg-pd($size, $scale, $type, $direction);
 }
 
-//@function tb-mg-v($size, $scale: tb-map-get-deep($_tb-paddings-margins, margin, vertical, scale)) {
-//
-//  @if tb-map-get-deep($_tb-paddings-margins-map, margin, $scale) {
-//    @return tb-map-get-deep($_tb-paddings-margins-map, margin, $scale, $size);
-//  } //
-//  @else {
-//    @if map_get($_tb-modular-scales, $scale) {
-//      $map: ();
-//      @debug $map;
-//      @each $size in $tb-size-suffixes {
-//        $size-name: nth($size, 1);
-//        $index: map-get($tb-size-suffixes, $size-name);
-//        $base: tb-map-get-deep($_tb-paddings-margins, margin, vertical, base);
-//        $value: tb-scale(
-//                $index,
-//                $base,
-//                map-get($_tb-modular-scales, $scale)
-//        );
-//        $map: tb-map-merge-deep($map,
-//            (margin:(
-//                vertical:(
-//                    #{$scale}:(
-//                        #{$size-name}:$value
-//                    )
-//                )
-//            ))
-//        );
-//      }
-//      @debug $map;
-//      $_tb-paddings-margins-map: tb-map-merge-deep($_tb-paddings-margins-map, $map) !global;
-//      @debug $_tb-paddings-margins-map;
-//      @return tb-map-get-deep($_tb-paddings-margins-map, margin, vertical, $scale, $size)
-//    } //
-//    @else {
-//      @error '`#{$scale}` does not exist in $_tb-modular-scales';
-//    }
-//  }
-//}
-
+// ----------------------------------------------------------------------------
+///
 @function tb-mg-h(
   $size: normal,
   $scale: tb-map-get-deep($_tb-paddings-margins, margin, vertical, scale),
@@ -99,6 +68,8 @@ $_tb-paddings-margins-map: (
   @return tb-mg-pd($size, $scale, $type, $direction);
 }
 
+// ----------------------------------------------------------------------------
+///
 @function tb-pd-v(
   $size: normal,
   $scale: tb-map-get-deep($_tb-paddings-margins, padding, vertical, scale),
@@ -107,6 +78,8 @@ $_tb-paddings-margins-map: (
   @return tb-mg-pd($size, $scale, $type, $direction);
 }
 
+// ----------------------------------------------------------------------------
+///
 @function tb-pd-h(
   $size: normal,
   $scale: tb-map-get-deep($_tb-paddings-margins, padding, horizontal, scale),
@@ -115,24 +88,32 @@ $_tb-paddings-margins-map: (
   @return tb-mg-pd($size, $scale, $type, $direction);
 }
 
+// ----------------------------------------------------------------------------
+///
 @mixin tb-mg-v($size, $important: null) {
   $important: if($important, unquote('!important'), null);
   margin-top: map-get($_tb-margin-vertical-map, $size) $important;
   margin-bottom: map-get($_tb-margin-vertical-map, $size) $important;
 }
 
+// ----------------------------------------------------------------------------
+///
 @mixin tb-mg-h($size, $important: null) {
   $important: if($important, unquote('!important'), null);
   margin-right: map-get($_tb-margin-horizontal-map, $size) $important;
   margin-left: map-get($_tb-margin-horizontal-map, $size) $important;
 }
 
+// ----------------------------------------------------------------------------
+///
 @mixin tb-pd-v($size, $important: null) {
   $important: if($important, unquote('!important'), null);
   padding-top: map-get($_tb-padding-vertical-map, $size) $important;
   padding-bottom: map-get($_tb-padding-vertical-map, $size) $important;
 }
 
+// ----------------------------------------------------------------------------
+///
 @mixin tb-pd-h($size, $important: null) {
   $important: if($important, unquote('!important'), null);
   padding-right: map-get($_tb-padding-horizontal-map, $size) $important;

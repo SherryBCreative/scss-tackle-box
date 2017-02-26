@@ -1,17 +1,22 @@
-//------------------------------------------------------------------------------
+// ############################################################################
 // Font Sizes
+// ----------------------------------------------------------------------------
 
+// ----------------------------------------------------------------------------
 // Base unit used to calculate modular scale
+// ----------------------------------------------------------------------------
 $tb-font-size-base: 1em !default;
 
-// Modular scale name for font-size to use
+// ----------------------------------------------------------------------------
+/// Modular scale name for font-size to use
 $tb-font-size-scale: 'perfect-fourth' !default;
 
-// font-size scale values | used for memoization
+// ----------------------------------------------------------------------------
+/// font-size scale values | used for memoization
 $tb-font-size-map: () !global;
 
-// populate $font-size-map
-
+// ----------------------------------------------------------------------------
+/// Populate $font-size-map
 @function tb-fz($size, $scale:$tb-font-size-scale) {
 
   @if map-get($tb-font-size-map, $scale) {
@@ -24,7 +29,6 @@ $tb-font-size-map: () !global;
       @each $size in $tb-size-suffixes {
         $size-name: nth($size, 1);
         $index: map-get($tb-size-suffixes, $size-name);
-
         $map: map_merge($map, ($size-name: tb-scale(
                 $index,
                 $tb-font-size-base,
@@ -32,7 +36,6 @@ $tb-font-size-map: () !global;
         )));
       }
       $tb-font-size-map: tb-map-set-deep($tb-font-size-map, $scale, $map) !global;
-
       @return tb-map-get-deep($tb-font-size-map, $scale, $size);
     } //
     @else {

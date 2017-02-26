@@ -1,6 +1,10 @@
-//------------------------------------------------------------------------------
 // Grid
+// ############################################################################
+// Grid
+// ----------------------------------------------------------------------------
 
+// ----------------------------------------------------------------------------
+///
 $tb_grid: (
     group:(
       // Toggles additional styles for nested groups
@@ -23,6 +27,7 @@ $tb_grid: (
     ),
 ) !default;
 
+// ----------------------------------------------------------------------------
 /// convert fractional (1 of 12) to percent
 /// @param {List} $fractional
 /// @return {Number} Percent
@@ -34,6 +39,7 @@ $tb_grid: (
   @return null;
 }
 
+// ----------------------------------------------------------------------------
 /// Returns map of grids ('6-12': 50%)
 /// @since 0.1.0
 /// @return {Map}
@@ -49,8 +55,12 @@ $tb_grid: (
   @return $grid-list;
 }
 
+// ----------------------------------------------------------------------------
+///
 $_grid-map: tb-make-grid-map();
 
+// ----------------------------------------------------------------------------
+///
 @mixin group-support-old {
   &::before,
   &::after {
@@ -63,6 +73,8 @@ $_grid-map: tb-make-grid-map();
   > * { float: left; }
 }
 
+// ----------------------------------------------------------------------------
+///
 @mixin tb-grid-gutters(
   $type: 'cell',
   $gutter-width-breakpoints: map-get-deep($tb_grid, gutters),
@@ -93,6 +105,7 @@ $_grid-map: tb-make-grid-map();
   }
 }
 
+// ----------------------------------------------------------------------------
 /// Group
 // @todo Auto child to be removed and replaced with a default cell to be width 100%
 @mixin tb-grid-group(
@@ -122,6 +135,8 @@ $_grid-map: tb-make-grid-map();
   //}
 }
 
+// ----------------------------------------------------------------------------
+//
 @mixin tb-grid-cell(//
   // Cell Type
   $type: null,
@@ -174,6 +189,7 @@ $_grid-map: tb-make-grid-map();
   }
 }
 
+// ----------------------------------------------------------------------------
 /// Enable cells within a group to be reordered
 ///
 /// @param {Number} $yield [$cell-order-yield] Number of cells
@@ -196,6 +212,7 @@ $_grid-map: tb-make-grid-map();
   }
 }
 
+// ----------------------------------------------------------------------------
 /// Reorder cell
 ///
 /// @param {Number | String} $yield [$cell-order-yield] Accepts: 'first', 'last', number
