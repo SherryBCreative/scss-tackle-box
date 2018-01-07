@@ -117,7 +117,7 @@ $_grid-map: tb-make-grid-map();
   $support-old: false
 ) {
   display: flex;
-  flex-wrap: $wrap; // @fixme: 2 cells eg(20% & 80%) wrap on page zoom (in? out?).
+  flex-wrap: $wrap;
   flex-direction: $direction;
 
   @if $support-old {
@@ -134,6 +134,36 @@ $_grid-map: tb-make-grid-map();
   //  }
   //}
 }
+
+%group {
+  @include tb-grid-group()
+}
+
+%group--column { flex-direction: column; }
+
+%align-items--center { align-items: center; }
+
+%align-items--flex-end { align-items: flex-end; }
+
+%align-items--flex-start { align-items: flex-start; }
+
+%justify-content--center { justify-content: center; }
+
+%justify-content--space-around { justify-content: space-around; }
+
+%justify-content--space-between { justify-content: space-between; }
+
+%justify-content--flex-end { justify-content: flex-end; }
+
+%justify-content--flex-start { justify-content: flex-start; }
+
+%flex-grow--0 { flex-grow: 0 }
+
+%flex-grow--1 { flex-grow: 1 }
+
+%flex-shrink--0 { flex-shrink: 0 }
+
+%flex-shrink--1 { flex-shrink: 1 }
 
 // ----------------------------------------------------------------------------
 //
@@ -235,3 +265,166 @@ $_grid-map: tb-make-grid-map();
     order: (($order * 2) + 1) !important;
   }
 }
+
+// ----------------------------------------------------------------------------
+/// Group breakpoints | used for memoization
+$tb-group-bp-map: () !global;
+
+// ----------------------------------------------------------------------------
+/// Group Breakpoint Placeholders
+///
+@mixin group-bp($bp) {
+  $name: 'group';
+
+  @if map-get($tb-group-bp-map, $bp) {
+    @extend %#{$bp}-%#{$name};
+  } //
+  @else {
+    @at-root {
+      @include media('>' + $bp) {
+        %#{$bp}-%#{$name} {
+          @include tb-grid-group();
+        }
+      }
+    }
+
+    @extend %#{$bp}-%#{$name};
+    $tb-group-bp-map: tb-map-set-deep($tb-group-bp-map, $bp, '') !global;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+/// $tb-group--direction-map breakpoints | used for memoization
+$tb-group--direction-map: () !global;
+
+// ----------------------------------------------------------------------------
+/// group--direction Breakpoint Placeholders
+///
+@mixin group--direction($bp, $value: 'row') {
+  $name: 'group--direction';
+
+  @if tb-map-get-deep($tb-group--direction-map, $bp $name) {
+    @extend %#{$bp}-%#{$name};
+  } //
+  @else {
+    @at-root {
+      @include media('>' + $bp) {
+        %#{$bp}-%#{$name} {
+          flex-direction: unquote($value);
+        }
+      }
+    }
+
+    @extend %#{$bp}-%#{$name};
+    $tb-group--direction-map: tb-map-set-deep($tb-group--direction-map, $bp, '') !global;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+/// $tb-group--align-items-map | used for memoization
+$tb-group--align-items-map: () !global;
+
+// ----------------------------------------------------------------------------
+/// group--align-items Breakpoint Placeholders
+///
+@mixin group--align-items($bp, $value: 'flex-start') {
+  $name: 'group--align-items';
+
+  @if tb-map-get-deep($tb-group--align-items-map, $bp $name) {
+    @extend %#{$bp}-%#{$name};
+  } //
+  @else {
+    @at-root {
+      @include media('>' + $bp) {
+        %#{$bp}-%#{$name} {
+          align-items: unquote($value);
+        }
+      }
+    }
+
+    @extend %#{$bp}-%#{$name};
+    $tb-group--align-items-map: tb-map-set-deep($tb-group--align-items-map, $bp, '') !global;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+/// $tb-group--justify-content-map | used for memoization
+$tb-group--justify-content-map: () !global;
+
+// ----------------------------------------------------------------------------
+/// group--justify-content Breakpoint Placeholders
+///
+@mixin group--justify-content($bp, $value: 'flex-start') {
+  $name: 'group--justify-content';
+
+  @if tb-map-get-deep($tb-group--justify-content-map, $bp $name) {
+    @extend %#{$bp}-%#{$name};
+  } //
+  @else {
+    @at-root {
+      @include media('>' + $bp) {
+        %#{$bp}-%#{$name} {
+          justify-content: unquote($value);
+        }
+      }
+    }
+
+    @extend %#{$bp}-%#{$name};
+    $tb-group--justify-content-map: tb-map-set-deep($tb-group--justify-content-map, $bp, '') !global;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+/// $tb-group--justify-content-map | used for memoization
+$tb-group--grow-shrink-map: () !global;
+
+// ----------------------------------------------------------------------------
+/// group--justify-content Breakpoint Placeholders
+///
+@mixin group--grow-shrink($bp, $type, $value: 1) {
+  $name: $type+'-'+$value;
+
+  @if tb-map-get-deep($tb-group--grow-shrink-map, $bp $name) {
+    @extend %#{$bp}-%#{$name};
+  } //
+  @else {
+    @at-root {
+      @include media('>' + $bp) {
+        %#{$bp}-%#{$name} {
+          @if 'grow' ==$type {
+            flex-grow: $value;
+          } @else if 'shrink' ==$type {
+            flex-shrink: $value;
+          }
+        }
+      }
+    }
+
+    @extend %#{$bp}-%#{$name};
+    $tb-group--grow-shrink-map: tb-map-set-deep($tb-group--grow-shrink-map, $bp, '') !global;
+  }
+}
+
+//  body {
+//    @include group-bp('sm');
+//    @include group--direction('sm');
+//    @include group--align-items('md');
+//    @include group--justify-content('md', 'center');
+//    @include group--grow-shrink('md', 'shrink', 0);
+//  }
+//
+//  a {
+//    @include group-bp('sm');
+//    @include group-bp('md');
+//    @include group--align-items('md', 'center');
+//    @include group--align-items('md', 'flex-end');
+//    @include group--align-items('md');
+//    @include group--justify-content('md', 'center');
+//    @include group--grow-shrink('md', 'grow', 1);
+//    @include group--grow-shrink('md', 'shrink', 1);
+//    @include group--grow-shrink('md', 'shrink', 0);
+//  }
