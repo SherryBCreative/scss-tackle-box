@@ -3,10 +3,10 @@
 // Import All the things
 // ----------------------------------------------------------------------------
 @import 'tackle/defaults';
-//@import '../include-media/dist/include-media';
-@import 'bower_components/include-media/dist/include-media';
-//@import '../sassy-maps/sass/sassy-maps';
-@import 'bower_components/sassy-maps/sass/sassy-maps';
+@import '../include-media/dist/include-media';
+//@import 'bower_components/include-media/dist/include-media';
+@import '../sassy-maps/sass/sassy-maps';
+//@import 'bower_components/sassy-maps/sass/sassy-maps';
 @import 'tackle/functions';
 @import 'tackle/mixins';
 @import 'tackle/scale';
