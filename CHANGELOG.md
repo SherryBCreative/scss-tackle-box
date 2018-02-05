@@ -1,5 +1,20 @@
 # Change Log
 
+## [0.0.10] - 2018-02-04
+
+### Added
+
+- function `tb-px-to-rem()`
+- function `tb-strip-unit()`
+- function `tb-fluid-type()`
+- mixin `tb-overlay-Container()`
+- mixin `tb-overlay-Item()`
+
+### Changed
+
+- Placeholder `%group--column` as `!important`
+- bower.json get latest
+
 ## [0.0.9] - 2018-01-07
 
 ### Added
@@ -17,4 +32,4 @@
 
 ### Added
 
-- `@mixin screen-reader-only()`
+- mixin `screen-reader-only()`

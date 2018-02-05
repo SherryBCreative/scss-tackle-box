@@ -179,3 +179,49 @@ $tb-decimal-places: 4 !default;
 @function tb-px-to-em($px, $base:16px) {
   @return $px/$base * 1em;
 }
+
+// ----------------------------------------------------------------------------
+/// Convert px to rem
+///
+/// @param {measure|number} $px
+/// @param {measure|number} $base
+///
+/// @return {measure}
+@function tb-px-to-rem($px, $context: $fz-base) {
+  @return $px/$base * 1rem;
+}
+
+// ----------------------------------------------------------------------------
+/// Strip Unit
+///
+// @author Hugo Giraudel
+///
+@function tb-strip-unit($value) {
+  @return $value / ($value * 0 + 1);
+}
+
+// ----------------------------------------------------------------------------
+///
+// https://www.sassmeister.com/gist/7f22e44ace49b5124eec
+//
+// @author Indrek Paas @indrekpaa
+///
+@mixin tb-fluid-type($properties, $min-vw, $max-vw, $min-value, $max-value, $important: false) {
+  $important: if($important, unquote('!important'), null);
+
+  @each $property in $properties {
+    #{$property}: $min-value $important;
+  }
+
+  @media screen and (min-width: $min-vw) {
+    @each $property in $properties {
+      #{$property}: calc(#{$min-value} + #{tb-strip-unit($max-value - $min-value)} * (100vw - #{$min-vw}) / #{tb-strip-unit($max-vw - $min-vw)}) $important;
+    }
+  }
+
+  @media screen and (min-width: $max-vw) {
+    @each $property in $properties {
+      #{$property}: $max-value $important;
+    }
+  }
+}

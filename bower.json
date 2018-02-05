@@ -11,8 +11,8 @@
     "tests"
   ],
   "dependencies": {
-    "include-media": "~1.4.8",
-    "sassy-maps": "^0.4.0"
+    "include-media": "latest",
+    "sassy-maps": "latest"
   },
   "devDependencies": {}
 }

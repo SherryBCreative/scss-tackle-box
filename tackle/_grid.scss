@@ -139,7 +139,7 @@ $_grid-map: tb-make-grid-map();
   @include tb-grid-group()
 }
 
-%group--column { flex-direction: column; }
+%group--column { flex-direction: column !important; }
 
 %align-items--center { align-items: center; }
 

@@ -128,3 +128,111 @@
     }
   }
 }
+
+// ----------------------------------------------------------------------------
+///
+@mixin tb-overlay-Container() {
+  position: relative;
+  overflow: hidden;
+}
+
+// ----------------------------------------------------------------------------
+///
+@mixin tb-overlay-Item($vertical: 'full', $horizontal:'full') {
+  position: absolute;
+
+  @if 'full' == $vertical and 'full' == $horizontal {
+    top: 0;
+    width: 100.75%;
+    height: 100%;
+    transform: translateX(0) translatey(0);
+  } //
+    //
+  @else if 'full' == $vertical and 'center' == $horizontal {
+    top: 0;
+    left: 50%;
+    height: 100%;
+    transform: translateX(-50%) translatey(0);
+  } //
+    //
+  @else if 'full' == $vertical and 'right' == $horizontal {
+    top: 0;
+    right: 0;
+    height: 100%;
+  } //
+    //
+  @else if 'full' == $vertical and 'left' == $horizontal {
+    top: 0;
+    height: 100%;
+  } //
+    //
+  @else if 'top' == $vertical and 'full' == $horizontal {
+    top: 0;
+    left: 50%;
+    width: 100.75%;
+    transform: translateX(-50%) translatey(0);
+  } //
+    //
+  @else if 'top' == $vertical and 'center' == $horizontal {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) translatey(0);
+  } //
+    //
+  @else if 'top' == $vertical and 'right' == $horizontal {
+    top: 0;
+    right: 0;
+  } //
+    //
+  @else if 'top' == $vertical and 'left' == $horizontal {
+    top: 0;
+  } //
+    //
+  @else if 'center' == $vertical and 'full' == $horizontal {
+    top: 50%;
+    left: 50%;
+    width: 100.75%;
+    transform: translateX(-50%) translatey(-50%);
+  } //
+    //
+  @else if 'center' == $vertical and 'center' == $horizontal {
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translatey(-50%);
+  } //
+    //
+  @else if 'center' == $vertical and 'right' == $horizontal {
+    top: 50%;
+    right: 0;
+    transform: translateX(0) translatey(-50%);
+  } //
+    //
+  @else if 'center' == $vertical and 'left' == $horizontal {
+    top: 50%;
+    transform: translateX(0) translatey(-50%);
+  } //
+
+  @else if 'bottom' == $vertical and 'full' == $horizontal {
+    bottom: 0;
+    left: 50%;
+    width: 100.75%;
+    transform: translateX(-50%) translatey(0);
+  } //
+    //
+  @else if 'bottom' == $vertical and 'center' == $horizontal {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) translatey(0);
+  } //
+    //
+  @else if 'bottom' == $vertical and 'right' == $horizontal {
+    bottom: 0;
+    right: 0;
+  } //
+    //
+  @else if 'bottom' == $vertical and 'left' == $horizontal {
+    bottom: 0;
+  }
+  //
+
+}
