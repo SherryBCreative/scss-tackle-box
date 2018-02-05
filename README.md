@@ -1,7 +1,7 @@
 scss-tackle-box
 ===
 
-A Tackle Box of various Scss tools and tackle. 
+A Tackle Box of various SCSS tools and tackle. 
 
 ## How to install
 
